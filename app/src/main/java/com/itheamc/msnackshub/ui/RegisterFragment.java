@@ -13,10 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.itheamc.msnackshub.R;
+import com.itheamc.msnackshub.callbacks.FirestoreCallbacks;
 import com.itheamc.msnackshub.databinding.FragmentRegisterBinding;
+import com.itheamc.msnackshub.utils.NotifyUtils;
 
 
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends Fragment implements FirestoreCallbacks {
     private static final String TAG = "RegisterFragment";
     private FragmentRegisterBinding registerBinding;
     private NavController navController;
@@ -55,4 +57,19 @@ public class RegisterFragment extends Fragment {
             }
         });
     }
+
+
+    /**
+     * These are the methods implemented from the FirestoreCallbacks to handle user storing status
+     */
+    @Override
+    public void onUserStoreSuccess() {
+        NotifyUtils.logDebug(TAG, "onUserStoreSuccess: --> User stored successfully");
+    }
+
+    @Override
+    public void onUserStoreFailure(@NonNull Exception e) {
+        NotifyUtils.showToast(getContext(), e.getMessage());
+    }
+
 }

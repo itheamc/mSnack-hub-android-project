@@ -33,5 +33,21 @@ public class Constraints {
     public static final int FACEBOOK_SIGN_IN_REQUEST_CODE = 103;
     public static final int PHONE_SIGN_IN_REQUEST_CODE = 104;
 
+    /**
+     * SharedPreference Name
+     */
+    public static final String SHARED_PREFERENCE_NAME = "mSnacksHub";
+
+    /**
+     * SharedPreference Keys
+     */
+    public static final String USER_ID = "_id";
+    public static final String USER_NAME = "_name";
+    public static final String USER_PHONE = "_phone";
+    public static final String USER_EMAIL = "_email";
+    public static final String USER_IMAGE = "_image";
+    public static final String USER_LAT = "_lat";
+    public static final String USER_LONG = "_long";
+
 
 }

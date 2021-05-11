@@ -62,7 +62,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
     For Bottom Sheet -- Code Verification Layout
      */
     private LinearLayout linearLayout;
-    private ConstraintLayout bottomSheetLayout;
     private BottomSheetBehavior<ConstraintLayout> bottomSheetBehavior;
     private VerificationBottomSheetViewBinding bottomSheetViewBinding;
 
@@ -120,7 +119,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
         /*
         Initializing Bottom Sheet and its views
          */
-        bottomSheetLayout = (ConstraintLayout) loginBinding.bottomSheetCoordinatorLayout.findViewById(R.id.verificationBottomSheetLayout);
+        ConstraintLayout bottomSheetLayout = (ConstraintLayout) loginBinding.bottomSheetCoordinatorLayout.findViewById(R.id.verificationBottomSheetLayout);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetLayout);
         bottomSheetViewBinding = VerificationBottomSheetViewBinding.bind(bottomSheetLayout);
         bottomSheetViewBinding.verifyOtpButton.setOnClickListener(this);
@@ -158,9 +157,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
                             // The SMS quota for the project has been exceeded
                             NotifyUtils.showToast(getContext(), "Quota exceeded for phone authentication. You can login with google or facebook");
                         }
-
-                        // Show a message and update the UI
-                        NotifyUtils.showToast(getContext(), e.getMessage());
                         handleLoginFragmentViewsState();
                         // Showing the bottom sheet to enter the verification code
                         if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
@@ -303,6 +299,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
 
     @Override
     public void onLoginSuccess(@NonNull FirebaseUser user) {
+
         NotifyUtils.logDebug(TAG, user.getDisplayName());
         startMainActivity();
     }
@@ -331,10 +328,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
      */
     private void handleBottomSheetViewsState() {
         // Handling progress bar visibility
-        if (bottomSheetViewBinding.progressBar.getVisibility() == View.VISIBLE) {
-            bottomSheetViewBinding.progressBar.setVisibility(View.GONE);
+        if (bottomSheetViewBinding.overlayLayout.getVisibility() == View.VISIBLE) {
+            bottomSheetViewBinding.overlayLayout.setVisibility(View.GONE);
         } else {
-            bottomSheetViewBinding.progressBar.setVisibility(View.VISIBLE);
+            bottomSheetViewBinding.overlayLayout.setVisibility(View.VISIBLE);
         }
 
         // enable or disable the verifyOtpButton
@@ -354,10 +351,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
     private void handleLoginFragmentViewsState() {
         // Handling progress bar visibility
         if (LOGIN_REQUEST_CODE != FACEBOOK_SIGN_IN_REQUEST_CODE) {
-            if (loginBinding.progressBar.getVisibility() == View.VISIBLE) {
-                loginBinding.progressBar.setVisibility(View.GONE);
+            if (loginBinding.overlayLayout.getVisibility() == View.VISIBLE) {
+                loginBinding.overlayLayout.setVisibility(View.GONE);
             } else {
-                loginBinding.progressBar.setVisibility(View.VISIBLE);
+                loginBinding.overlayLayout.setVisibility(View.VISIBLE);
             }
         }
 
