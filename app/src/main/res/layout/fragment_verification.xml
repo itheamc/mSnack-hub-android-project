@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/verificationLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.VerificationFragment">
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foreground="@drawable/login_image_foreground"
+        android:scaleType="centerCrop"
+        android:contentDescription="@string/this_is_background_image"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/verification_img" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <EditText
+            android:id="@+id/verificationNumber1"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/edittext_shape"
+            android:fontFamily="@font/dekko"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="5"
+            android:textAlignment="center"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/verificationNumber2"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/edittext_shape"
+            android:fontFamily="@font/dekko"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/verificationNumber3"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/edittext_shape"
+            android:fontFamily="@font/dekko"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/verificationNumber4"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/edittext_shape"
+            android:fontFamily="@font/dekko"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/verificationNumber5"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/edittext_shape"
+            android:fontFamily="@font/dekko"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/white"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/verificationNumber6"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_margin="2dp"
+            android:background="@drawable/edittext_shape"
+            android:fontFamily="@font/dekko"
+            android:inputType="number"
+            android:maxLength="1"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:text="1"
+            android:textAlignment="center"
+            android:textColor="@color/purple_200"
+            android:textColorHint="@color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/verifyOtpButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="24dp"
+        android:fontFamily="@font/dekko"
+        android:text="@string/verify"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <LinearLayout
+        android:id="@+id/resendOtpLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@+id/verifyOtpButton"
+        app:layout_constraintStart_toStartOf="@+id/verifyOtpButton"
+        app:layout_constraintTop_toBottomOf="@+id/verifyOtpButton">
+
+        <TextView
+            android:id="@+id/textLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:fontFamily="@font/dekko"
+            android:text="@string/didn_t_get_the_otp"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/resendOtpBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:fontFamily="@font/dekko"
+            android:text="@string/resend"
+            android:textColor="@color/purple_200"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="sign_in">Sign In</string>
+    <string name="or">OR</string>
+    <string name="sign_in_with">Sign In With</string>
+    <string name="sign_up">SIGN UP</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="google">Google</string>
+    <string name="facebook">Facebook</string>
+    <string name="skip"><![CDATA[Skip >>]]></string>
+    <string name="name">Name</string>
+    <string name="email_optional">Email (Optional)</string>
+    <string name="i_agree_with">I agree with</string>
+    <string name="terms">Terms</string>
+    <string name="and">and</string>
+    <string name="conditions">Conditions</string>
+    <string name="sign_up_with">Sign Up With</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="this_is_background_image">This is background image</string>
+    <string name="verify">Verify</string>
+    <string name="didn_t_get_the_otp">Didn\'t get the OTP?</string>
+    <string name="resend">Resend</string>
+
+    <string name="facebook_app_id">465660304530122</string>
+    <string name="fb_login_protocol_scheme">fb465660304530122</string>
+    <string name="web_client_id">863767538127-5fq0rdaqnn5bkaid5atnfgetm1tttdvv.apps.googleusercontent.com</string>
+    <string name="unable_to_login_message">Something went wrong!!</string>
+    <string name="background_image">background image</string>
+
+</resources>

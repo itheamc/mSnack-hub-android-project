@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "863767538127",
+    "project_id": "msnacks-hub",
+    "storage_bucket": "msnacks-hub.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863767538127:android:758f2950ea99295b594aba",
+        "android_client_info": {
+          "package_name": "com.itheamc.msnackshub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863767538127-iiuun72k55im2h2ipatkh1vgq7v0ojpk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.itheamc.msnackshub",
+            "certificate_hash": "5bf4d6405ff542e819b92355a8e254b8e996e0e9"
+          }
+        },
+        {
+          "client_id": "863767538127-5fq0rdaqnn5bkaid5atnfgetm1tttdvv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-sl2OvGjlKw6xYMEKVjLVOxsPI1L_pxI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863767538127-5fq0rdaqnn5bkaid5atnfgetm1tttdvv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

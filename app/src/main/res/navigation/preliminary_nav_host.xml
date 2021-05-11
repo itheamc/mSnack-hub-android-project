@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/preliminary_nav_host"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/introductoryFragment"
+        android:name="com.itheamc.msnackshub.ui.IntroductoryFragment"
+        android:label="Guides"
+        tools:layout="@layout/fragment_introductory" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.itheamc.msnackshub.ui.LoginFragment"
+        android:label="Login"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_verificationFragment"
+            app:destination="@id/verificationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.itheamc.msnackshub.ui.RegisterFragment"
+        android:label="Register"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_verificationFragment"
+            app:destination="@id/verificationFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/verificationFragment"
+        android:name="com.itheamc.msnackshub.ui.VerificationFragment"
+        android:label="fragment_verification"
+        tools:layout="@layout/fragment_verification" >
+        <action
+            android:id="@+id/action_verificationFragment_to_introductoryFragment"
+            app:destination="@id/introductoryFragment" />
+    </fragment>
+</navigation>
