@@ -28,5 +28,8 @@
     <string name="web_client_id">863767538127-5fq0rdaqnn5bkaid5atnfgetm1tttdvv.apps.googleusercontent.com</string>
     <string name="unable_to_login_message">Something went wrong!!</string>
     <string name="background_image">background image</string>
+    <string name="provide_your_personal_info">Provide your personal info!!</string>
+    <string name="continue_button">Continue</string>
+    <string name="warning_message_regarding_terms">While signing in you will automatically accept our</string>
 
 </resources>

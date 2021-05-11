@@ -16,6 +16,7 @@ import static com.itheamc.msnackshub.utils.Constraints.USER_LAT;
 import static com.itheamc.msnackshub.utils.Constraints.USER_LONG;
 import static com.itheamc.msnackshub.utils.Constraints.USER_NAME;
 import static com.itheamc.msnackshub.utils.Constraints.USER_PHONE;
+import static com.itheamc.msnackshub.utils.Constraints.USER_UID;
 
 public class StorageHandler {
     private static StorageHandler instance;
@@ -60,15 +61,34 @@ public class StorageHandler {
         String _lat = sharedPreferences.getString(USER_LAT, "0.00");
         String _long = sharedPreferences.getString(USER_LONG, "0.00");
 
-        return new User(
-                _id,
-                _name,
-                _phone,
-                _email,
-                _image,
-                Double.valueOf(_lat),
-                Double.valueOf(_long)
-        );
+        User user = null;
+
+        if (_id != null) {
+            user =  new User(
+                    _id,
+                    _name,
+                    _phone,
+                    _email,
+                    _image,
+                    Double.valueOf(_lat),
+                    Double.valueOf(_long)
+            );
+        }
+
+        return user;
+
+    }
+
+    //Function to store uuid
+    public void storeUuId(String uuid) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_UID, uuid);
+        editor.apply();
+    }
+
+    //Function to store uuid
+    public String getUuId() {
+        return sharedPreferences.getString(USER_UID, null);
     }
 
 }

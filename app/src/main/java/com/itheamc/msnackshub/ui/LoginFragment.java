@@ -30,10 +30,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.itheamc.msnackshub.R;
+import com.itheamc.msnackshub.callbacks.FirestoreCallbacks;
 import com.itheamc.msnackshub.callbacks.LoginStatusCallback;
 import com.itheamc.msnackshub.databinding.FragmentLoginBinding;
 import com.itheamc.msnackshub.databinding.VerificationBottomSheetViewBinding;
+import com.itheamc.msnackshub.handlers.FirestoreHandler;
 import com.itheamc.msnackshub.handlers.LoginHandler;
+import com.itheamc.msnackshub.handlers.StorageHandler;
+import com.itheamc.msnackshub.models.User;
 import com.itheamc.msnackshub.utils.NotifyUtils;
 import com.itheamc.msnackshub.utils.InputUtils;
 
@@ -46,7 +50,7 @@ import static com.itheamc.msnackshub.utils.Constraints.GOOGLE_SIGN_IN_REQUEST_CO
 import static com.itheamc.msnackshub.utils.Constraints.PHONE_SIGN_IN_REQUEST_CODE;
 
 
-public class LoginFragment extends Fragment implements View.OnClickListener, LoginStatusCallback {
+public class LoginFragment extends Fragment implements View.OnClickListener, LoginStatusCallback, FirestoreCallbacks {
     private static final String TAG = "LoginFragment";
     private FragmentLoginBinding loginBinding;
     private NavController navController;
@@ -56,6 +60,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
     private String verificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private LoginHandler loginHandler;
+    private FirebaseUser firebaseUser;
 
 
     /*
@@ -112,7 +117,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
         // Setting onClickListener on these views
         loginBinding.facebookLoginButton.setOnClickListener(this);
         loginBinding.skipButton.setOnClickListener(this);
-        loginBinding.signUpBtn.setOnClickListener(this);
         loginBinding.googleLoginButton.setOnClickListener(this);
         loginBinding.signInButton.setOnClickListener(this);
 
@@ -205,13 +209,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
         }
     }
 
-    // Handling click event on views
+    /**
+     * -------------------------------------------------------------------
+     * Handling click event on views
+     * -------------------------------------------------------------------
+     */
+
     @Override
     public void onClick(View v) {
         int _id = v.getId();
-        if (_id == loginBinding.signUpBtn.getId()) {
-            navController.navigate(R.id.action_loginFragment_to_registerFragment);
-        } else if (_id == loginBinding.skipButton.getId()) {
+        if (_id == loginBinding.skipButton.getId()) {
             startActivity(new Intent(requireActivity(), MainActivity.class));
             requireActivity().finish();
 
@@ -255,7 +262,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
 
 
     /**
+     * -----------------------------------------------------------------------
      * This is the overrided method to listen the activity result
+     * -----------------------------------------------------------------------
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -293,30 +302,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
 
 
     /**
-     * These are functions Overrided from the LoginStatusCallback
-     * @param user -- It the instance of the firebase user after successful login
-     */
-
-    @Override
-    public void onLoginSuccess(@NonNull FirebaseUser user) {
-
-        NotifyUtils.logDebug(TAG, user.getDisplayName());
-        startMainActivity();
-    }
-
-    @Override
-    public void onLoginFailure(@NonNull String errorMessage) {
-        handleLoginFragmentViewsState();
-        NotifyUtils.logDebug(TAG, errorMessage);
-        NotifyUtils.showToast(getContext(), errorMessage.split("--")[1]);
-        if (LOGIN_REQUEST_CODE == PHONE_SIGN_IN_REQUEST_CODE) {
-            handleBottomSheetViewsState();
-        }
-    }
-
-
-    /**
+     * ----------------------------------------------------------------------
      * Function to navigate to the Main Activity if everything if ok
+     * ----------------------------------------------------------------------
      */
     private void startMainActivity() {
         requireActivity().startActivity(new Intent(requireActivity(), MainActivity.class));
@@ -324,7 +312,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
     }
 
     /**
-     * Function to handle the views inability and disability
+     * ----------------------------------------------------------------------
+     * Function to handle the Bottom Sheet views inability and disability
+     * ----------------------------------------------------------------------
      */
     private void handleBottomSheetViewsState() {
         // Handling progress bar visibility
@@ -347,7 +337,11 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
 
     }
 
-    // Function to handle views visibility and enable status
+    /**
+     * ----------------------------------------------------------------------
+     * Function to handle the Login Fragment views inability and disability
+     * ----------------------------------------------------------------------
+     */
     private void handleLoginFragmentViewsState() {
         // Handling progress bar visibility
         if (LOGIN_REQUEST_CODE != FACEBOOK_SIGN_IN_REQUEST_CODE) {
@@ -362,12 +356,16 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
         loginBinding.signInButton.setEnabled(!loginBinding.signInButton.isEnabled());
         loginBinding.facebookLoginButton.setEnabled(!loginBinding.facebookLoginButton.isEnabled());
         loginBinding.googleLoginButton.setEnabled(!loginBinding.googleLoginButton.isEnabled());
-        loginBinding.signUpBtn.setEnabled(!loginBinding.signUpBtn.isEnabled());
         loginBinding.editTextPhone.setEnabled(!loginBinding.editTextPhone.isEnabled());
         loginBinding.skipButton.setEnabled(!loginBinding.skipButton.isEnabled());
     }
 
-    // Timer function to enable or disable the resend OTP button
+
+    /**
+     * ----------------------------------------------------------------------
+     * Timer function to enable or disable the resend OTP button
+     * ----------------------------------------------------------------------
+     */
     private void handleResendOTPTimer() {
         Timer timer = new Timer();
 
@@ -388,5 +386,82 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
         };
 
         timer.schedule(timerTask, 0L, 1000L);
+    }
+
+
+    /**
+     * ---------------------------------------------------------------------------
+     * These are functions Overrided from the LoginStatusCallback
+     * @param user -- It the instance of the firebase user after successful login
+     * ---------------------------------------------------------------------------
+     */
+
+    @Override
+    public void onLoginSuccess(@NonNull FirebaseUser user) {
+        firebaseUser = user;
+        StorageHandler.getInstance(requireActivity()).storeUuId(user.getUid());
+        FirestoreHandler.getInstance(this).getUser(user.getUid());
+    }
+
+    @Override
+    public void onLoginFailure(@NonNull String errorMessage) {
+        handleLoginFragmentViewsState();
+        NotifyUtils.logDebug(TAG, errorMessage);
+        NotifyUtils.showToast(getContext(), errorMessage.split("--")[1]);
+        if (LOGIN_REQUEST_CODE == PHONE_SIGN_IN_REQUEST_CODE) {
+            handleBottomSheetViewsState();
+        }
+    }
+
+
+    /**
+     * -------------------------------------------------------------------
+     * These are the methods implemented from the FirestoreCallbacks
+     * -------------------------------------------------------------------
+     */
+
+    @Override
+    public void onUserStoreSuccess() {
+        startMainActivity();
+    }
+
+    @Override
+    public void onUserStoreFailure(Exception e) {
+        handleLoginFragmentViewsState();
+        NotifyUtils.showToast(getContext(), e.getMessage());
+        NotifyUtils.logDebug(TAG, "onUserStoreFailure: - " + e.getMessage());
+    }
+
+    @Override
+    public void onUserInfoRetrieved(User user) {
+        if (user != null) {
+            StorageHandler.getInstance(requireActivity()).storeUser(user);
+            startMainActivity();
+        } else {
+            if (LOGIN_REQUEST_CODE == GOOGLE_SIGN_IN_REQUEST_CODE || LOGIN_REQUEST_CODE == FACEBOOK_SIGN_IN_REQUEST_CODE) {
+                User newUser = new User(
+                        firebaseUser.getUid(),
+                        firebaseUser.getDisplayName(),
+                        firebaseUser.getPhoneNumber(),
+                        firebaseUser.getEmail(),
+                        String.valueOf(firebaseUser.getPhotoUrl()),
+                        27.82345,
+                        82.52123
+                );
+                Log.d(TAG, "onUserInfoRetrieved: " + newUser.toString());
+                StorageHandler.getInstance(requireActivity()).storeUser(newUser);
+                FirestoreHandler.getInstance(this).storeUser(newUser);
+            } else {
+                navController.navigate(R.id.action_loginFragment_to_registerFragment);
+            }
+        }
+
+    }
+
+    @Override
+    public void onUserInfoRetrievedError(Exception e) {
+        handleLoginFragmentViewsState();
+        NotifyUtils.showToast(getContext(), e.getMessage());
+        NotifyUtils.logDebug(TAG, "onUserInfoRetrievedError: - " + e.getMessage());
     }
 }

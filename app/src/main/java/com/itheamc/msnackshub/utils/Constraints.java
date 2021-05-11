@@ -48,6 +48,7 @@ public class Constraints {
     public static final String USER_IMAGE = "_image";
     public static final String USER_LAT = "_lat";
     public static final String USER_LONG = "_long";
+    public static final String USER_UID = "_uuid";
 
 
 }

@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import com.itheamc.msnackshub.R;
 import com.itheamc.msnackshub.callbacks.FirestoreCallbacks;
 import com.itheamc.msnackshub.databinding.FragmentRegisterBinding;
+import com.itheamc.msnackshub.models.User;
 import com.itheamc.msnackshub.utils.NotifyUtils;
 
 
@@ -50,12 +51,6 @@ public class RegisterFragment extends Fragment implements FirestoreCallbacks {
 
         navController = Navigation.findNavController(view);
 
-        registerBinding.signUpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.action_registerFragment_to_verificationFragment);
-            }
-        });
     }
 
 
@@ -69,6 +64,16 @@ public class RegisterFragment extends Fragment implements FirestoreCallbacks {
 
     @Override
     public void onUserStoreFailure(@NonNull Exception e) {
+        NotifyUtils.showToast(getContext(), e.getMessage());
+    }
+
+    @Override
+    public void onUserInfoRetrieved(@NonNull User user) {
+
+    }
+
+    @Override
+    public void onUserInfoRetrievedError(@NonNull Exception e) {
         NotifyUtils.showToast(getContext(), e.getMessage());
     }
 
