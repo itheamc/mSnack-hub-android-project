@@ -31,5 +31,7 @@
     <string name="provide_your_personal_info">Provide your personal info!!</string>
     <string name="continue_button">Continue</string>
     <string name="warning_message_regarding_terms">While signing in you will automatically accept our</string>
+    <string name="allow_location_permission">Allow Location Permission</string>
+    <string name="location_request_message">Please allow your device\'s location permission to access our location based services.</string>
 
 </resources>

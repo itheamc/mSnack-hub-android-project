@@ -7,18 +7,16 @@ import java.util.Base64;
 import java.util.Locale;
 
 public class Amcryption {
-    private static final Decoder DECODER = new Decoder();
-    private static final Encoder ENCODER = new Encoder();
 
     /*
     Getters for the encoder and decoder
      */
     public static Decoder getDecoder() {
-        return DECODER;
+        return new Decoder();
     }
 
     public static Encoder getEncoder() {
-        return ENCODER;
+        return new Encoder();
     }
 
     /*____________________________________________Encoder and Decoder Classes___________________________*/
@@ -278,7 +276,7 @@ public class Amcryption {
      */
 
     /* a-z */
-    public static char[] getLowerChars() {
+    private static char[] getLowerChars() {
         char[] tempLowerChars = new char[26];
         int n = 0;
         for (char c = 'a'; c <= 'z'; c++) {
@@ -290,7 +288,7 @@ public class Amcryption {
     }
 
     /* A-Z */
-    public static char[] getUpperChars() {
+    private static char[] getUpperChars() {
         char[] tempupperChars = new char[26];
         int n = 0;
         for (char c = 'A'; c <= 'Z'; c++) {
@@ -302,7 +300,7 @@ public class Amcryption {
     }
 
     /* 0-9 */
-    public static char[] getNumChars() {
+    private static char[] getNumChars() {
         char[] tempNumChars = new char[10];
 
         for (int i = 0; i < 10; i++) {
@@ -314,7 +312,7 @@ public class Amcryption {
 
 
     /* CharSequences */
-    public static String[] getCharSequence(char[] lowerChars, char[] upperChars) {
+    private static String[] getCharSequence(char[] lowerChars, char[] upperChars) {
         String[] charSequence = new String[26];
         int m = 6;
         int n = 17;
@@ -360,7 +358,7 @@ public class Amcryption {
 
     /* CharSequences1 */
 
-    public static String[] getCharSequence1(char[] lowerChars, char[] upperChars) {
+    private static String[] getCharSequence1(char[] lowerChars, char[] upperChars) {
         String[] charSequence1 = new String[26];
         int m = 0;
         int n = 11;
@@ -403,7 +401,7 @@ public class Amcryption {
     }
 
     /* CharSequence2 */
-    public static String[] getCharSequence2(char[] lowerChars, char[] upperChars) {
+    private static String[] getCharSequence2(char[] lowerChars, char[] upperChars) {
         String[] charSequence2 = new String[10];
         int m = 3;
         int n = 15;

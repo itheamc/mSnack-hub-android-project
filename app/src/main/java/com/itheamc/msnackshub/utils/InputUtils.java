@@ -81,8 +81,11 @@ public class InputUtils {
     }
 
 
-
-    // Function to change focuses on the otp edit text
+    /**
+     * -----------------------------------------------------------------------
+     *     Function to change focuses on the otp edit text
+     * -----------------------------------------------------------------------
+      */
     public static void requestFocusOnEditText(ViewBinding viewBinding) {
         VerificationBottomSheetViewBinding verificationBinding =
                 ((VerificationBottomSheetViewBinding) viewBinding);

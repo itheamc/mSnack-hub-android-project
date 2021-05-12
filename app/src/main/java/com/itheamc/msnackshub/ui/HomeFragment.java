@@ -70,9 +70,17 @@ public class HomeFragment extends Fragment implements LocationChangeCallback {
         executorService = Executors.newFixedThreadPool(4);
 
         if (!isPermissionGranted()) {
-            requestPermission();
+            homeBinding.overlayLayout.setVisibility(View.VISIBLE);
+        } else {
+            LocationHandler.getInstance(requireContext(), this, executorService).getCurrentLocation();
         }
-        LocationHandler.getInstance(requireContext(), this, executorService).getCurrentLocation();
+
+        homeBinding.allowPermissionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestPermission();
+            }
+        });
 
     }
 
@@ -185,9 +193,11 @@ public class HomeFragment extends Fragment implements LocationChangeCallback {
             if (isAllGranted(grantResults)) {
                 // All permission is granted
                 Log.d(TAG, "onRequestPermissionsResult: All Permission granted");
+                homeBinding.overlayLayout.setVisibility(View.GONE);
                 LocationHandler.getInstance(requireContext(), this, executorService).getCurrentLocation();
             } else {
                 Log.d(TAG, "onRequestPermissionsResult: Denied");
+                requireActivity().finish();
             }
         }
     }
@@ -197,6 +207,7 @@ public class HomeFragment extends Fragment implements LocationChangeCallback {
         boolean isGranted = false;
         for (int i: grantResults) {
             if (i == PackageManager.PERMISSION_DENIED) {
+                isGranted = false;
                 break;
             } else {
                 isGranted = true;

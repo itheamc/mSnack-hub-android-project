@@ -38,6 +38,7 @@ import com.itheamc.msnackshub.handlers.FirestoreHandler;
 import com.itheamc.msnackshub.handlers.LoginHandler;
 import com.itheamc.msnackshub.handlers.StorageHandler;
 import com.itheamc.msnackshub.models.User;
+import com.itheamc.msnackshub.utils.Amcryption;
 import com.itheamc.msnackshub.utils.NotifyUtils;
 import com.itheamc.msnackshub.utils.InputUtils;
 
@@ -60,7 +61,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
     private String verificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private LoginHandler loginHandler;
-    private FirebaseUser firebaseUser;
 
 
     /*
@@ -164,7 +164,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
                         handleLoginFragmentViewsState();
                         // Showing the bottom sheet to enter the verification code
                         if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                           handleBottomSheetViewsState();
+                            handleBottomSheetViewsState();
                         }
 
                     }
@@ -375,7 +375,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
                 HandlerCompat.createAsync(Looper.getMainLooper()).post(() -> {
                     bottomSheetViewBinding.resendOtpBtn.setText(String.format(Locale.ENGLISH, "wait %d sec", time_left));
                     if (time_left == 0) {
-                        time_left = 60 + (60 * number_of_resends)/2;
+                        time_left = 60 + (60 * number_of_resends) / 2;
                         bottomSheetViewBinding.resendOtpBtn.setEnabled(true);
                         bottomSheetViewBinding.resendOtpBtn.setText(getString(R.string.resend));
                         timer.cancel();
@@ -392,14 +392,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
     /**
      * ---------------------------------------------------------------------------
      * These are functions Overrided from the LoginStatusCallback
+     *
      * @param user -- It the instance of the firebase user after successful login
-     * ---------------------------------------------------------------------------
+     *             ---------------------------------------------------------------------------
      */
 
     @Override
     public void onLoginSuccess(@NonNull FirebaseUser user) {
-        firebaseUser = user;
-        StorageHandler.getInstance(requireActivity()).storeUuId(user.getUid());
+//        StorageHandler.getInstance(requireActivity()).storeUuId(user.getUid());
         FirestoreHandler.getInstance(this).getUser(user.getUid());
     }
 
@@ -435,25 +435,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener, Log
     @Override
     public void onUserInfoRetrieved(User user) {
         if (user != null) {
-            StorageHandler.getInstance(requireActivity()).storeUser(user);
+            NotifyUtils.logDebug(TAG, user.toString());
             startMainActivity();
         } else {
-            if (LOGIN_REQUEST_CODE == GOOGLE_SIGN_IN_REQUEST_CODE || LOGIN_REQUEST_CODE == FACEBOOK_SIGN_IN_REQUEST_CODE) {
-                User newUser = new User(
-                        firebaseUser.getUid(),
-                        firebaseUser.getDisplayName(),
-                        firebaseUser.getPhoneNumber(),
-                        firebaseUser.getEmail(),
-                        String.valueOf(firebaseUser.getPhotoUrl()),
-                        27.82345,
-                        82.52123
-                );
-                Log.d(TAG, "onUserInfoRetrieved: " + newUser.toString());
-                StorageHandler.getInstance(requireActivity()).storeUser(newUser);
-                FirestoreHandler.getInstance(this).storeUser(newUser);
-            } else {
-                navController.navigate(R.id.action_loginFragment_to_registerFragment);
-            }
+            navController.navigate(R.id.action_loginFragment_to_registerFragment);
         }
 
     }
