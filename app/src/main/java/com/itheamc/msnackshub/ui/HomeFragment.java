@@ -16,15 +16,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.itheamc.msnackshub.adapters.HomeAdapter;
 import com.itheamc.msnackshub.callbacks.LocationChangeCallback;
 import com.itheamc.msnackshub.databinding.FragmentHomeBinding;
+import com.itheamc.msnackshub.handlers.StorageHandler;
 import com.itheamc.msnackshub.models.Category;
 import com.itheamc.msnackshub.models.HomeItem;
 import com.itheamc.msnackshub.models.Notice;
 import com.itheamc.msnackshub.models.Product;
 import com.itheamc.msnackshub.models.Slider;
 import com.itheamc.msnackshub.handlers.LocationHandler;
+import com.itheamc.msnackshub.utils.Amcryption;
 import com.itheamc.msnackshub.utils.NotifyUtils;
 
 import java.util.ArrayList;
@@ -76,8 +79,15 @@ public class HomeFragment extends Fragment implements LocationChangeCallback, Vi
 
         if (!isPermissionGranted()) {
             homeBinding.overlayLayout.setVisibility(View.VISIBLE);
-            if (mAuth.getCurrentUser() != null) {
-                homeBinding.setName(mAuth.getCurrentUser().getDisplayName().split(" ")[0]);
+            FirebaseUser user = mAuth.getCurrentUser();
+            if (user != null) {
+                if (user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
+                    homeBinding.setName(user.getDisplayName().split(" ")[0]);
+                } else {
+                    homeBinding.setName(Amcryption.getDecoder().decode(StorageHandler.getInstance(requireActivity()).getUser().get_name()).split(" ")[0]);
+                }
+            } else {
+                homeBinding.setName(Amcryption.getDecoder().decode(StorageHandler.getInstance(requireActivity()).getUser().get_name()).split(" ")[0]);
             }
         } else {
             LocationHandler.getInstance(requireContext(), this, executorService).getCurrentLocation();

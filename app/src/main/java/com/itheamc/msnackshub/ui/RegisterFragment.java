@@ -136,6 +136,7 @@ public class RegisterFragment extends Fragment implements FirestoreCallbacks, Vi
             );
             handleRegisterFragmentViewsState();
             NotifyUtils.logDebug(TAG, "onUserInfoRetrieved: " + newUser.toString());
+            StorageHandler.getInstance(requireActivity()).storeUser(newUser);
             FirestoreHandler.getInstance(this).storeUser(newUser);
         }
     }
