@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.itheamc.msnackshub.adapters.HomeAdapter;
 import com.itheamc.msnackshub.callbacks.LocationChangeCallback;
 import com.itheamc.msnackshub.databinding.FragmentHomeBinding;
@@ -24,6 +25,7 @@ import com.itheamc.msnackshub.models.Notice;
 import com.itheamc.msnackshub.models.Product;
 import com.itheamc.msnackshub.models.Slider;
 import com.itheamc.msnackshub.handlers.LocationHandler;
+import com.itheamc.msnackshub.utils.NotifyUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,11 +43,12 @@ import static com.itheamc.msnackshub.utils.Constraints.VIEW_TYPE_NOTICE;
 import static com.itheamc.msnackshub.utils.Constraints.VIEW_TYPE_SLIDERS;
 
 
-public class HomeFragment extends Fragment implements LocationChangeCallback {
+public class HomeFragment extends Fragment implements LocationChangeCallback, View.OnClickListener {
     private static final String TAG = "HomeFragment";
     private FragmentHomeBinding homeBinding;
     private HomeAdapter homeAdapter;
     private ExecutorService executorService;
+    private FirebaseAuth mAuth;
 
 
     public HomeFragment() {
@@ -69,20 +72,49 @@ public class HomeFragment extends Fragment implements LocationChangeCallback {
         homeAdapter.submitList(generateHomeItems());
         executorService = Executors.newFixedThreadPool(4);
 
+        mAuth = FirebaseAuth.getInstance();
+
         if (!isPermissionGranted()) {
             homeBinding.overlayLayout.setVisibility(View.VISIBLE);
+            if (mAuth.getCurrentUser() != null) {
+                homeBinding.setName(mAuth.getCurrentUser().getDisplayName().split(" ")[0]);
+            }
         } else {
             LocationHandler.getInstance(requireContext(), this, executorService).getCurrentLocation();
         }
 
-        homeBinding.allowPermissionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestPermission();
-            }
-        });
+        homeBinding.allowPermissionButton.setOnClickListener(this);
+        homeBinding.closeButton.setOnClickListener(this);
 
     }
+
+
+    /**
+     * Overriding method to handle on Click listener on views
+     * -------------------------------------------------------------
+     */
+    @Override
+    public void onClick(View v) {
+        int _id = v.getId();
+        if (_id == homeBinding.allowPermissionButton.getId()) {
+            if (!isPermissionGranted()) {
+                requestPermission();
+            } else {
+                NotifyUtils.showToast(getContext(), "Permission already granted");
+            }
+
+        } else if (_id == homeBinding.closeButton.getId()) {
+            if (isPermissionGranted()) {
+                homeBinding.overlayLayout.setVisibility(View.GONE);
+            } else {
+                requireActivity().finish();
+            }
+
+        } else {
+            NotifyUtils.logDebug(TAG, "Unspecified button click");
+        }
+    }
+
 
 
     // Function to create dummy list
@@ -179,8 +211,11 @@ public class HomeFragment extends Fragment implements LocationChangeCallback {
 
     // FUnction to request permission
     private void requestPermission() {
+        if (getActivity() == null) {
+            return;
+        }
         ActivityCompat.requestPermissions(
-                requireActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+                getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
     }
 
 
@@ -193,11 +228,9 @@ public class HomeFragment extends Fragment implements LocationChangeCallback {
             if (isAllGranted(grantResults)) {
                 // All permission is granted
                 Log.d(TAG, "onRequestPermissionsResult: All Permission granted");
-                homeBinding.overlayLayout.setVisibility(View.GONE);
-                LocationHandler.getInstance(requireContext(), this, executorService).getCurrentLocation();
+                LocationHandler.getInstance(getContext(), this, executorService).getCurrentLocation();
             } else {
                 Log.d(TAG, "onRequestPermissionsResult: Denied");
-                requireActivity().finish();
             }
         }
     }
