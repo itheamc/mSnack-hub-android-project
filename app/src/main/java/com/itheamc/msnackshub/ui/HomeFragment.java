@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,17 +19,23 @@ import android.view.ViewGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.itheamc.msnackshub.adapters.HomeAdapter;
+import com.itheamc.msnackshub.api.RequestHandler;
+import com.itheamc.msnackshub.api.Routes;
 import com.itheamc.msnackshub.callbacks.LocationChangeCallback;
+import com.itheamc.msnackshub.callbacks.RequestCallbacks;
 import com.itheamc.msnackshub.databinding.FragmentHomeBinding;
 import com.itheamc.msnackshub.handlers.StorageHandler;
 import com.itheamc.msnackshub.models.Category;
 import com.itheamc.msnackshub.models.HomeItem;
+import com.itheamc.msnackshub.models.Hotel;
 import com.itheamc.msnackshub.models.Notice;
+import com.itheamc.msnackshub.models.Order;
 import com.itheamc.msnackshub.models.Product;
 import com.itheamc.msnackshub.models.Slider;
 import com.itheamc.msnackshub.handlers.LocationHandler;
 import com.itheamc.msnackshub.utils.Amcryption;
 import com.itheamc.msnackshub.utils.NotifyUtils;
+import com.itheamc.msnackshub.viewmodel.SharedViewModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,11 +53,12 @@ import static com.itheamc.msnackshub.utils.Constraints.VIEW_TYPE_NOTICE;
 import static com.itheamc.msnackshub.utils.Constraints.VIEW_TYPE_SLIDERS;
 
 
-public class HomeFragment extends Fragment implements LocationChangeCallback, View.OnClickListener {
+public class HomeFragment extends Fragment implements LocationChangeCallback, RequestCallbacks, View.OnClickListener {
     private static final String TAG = "HomeFragment";
     private FragmentHomeBinding homeBinding;
     private HomeAdapter homeAdapter;
     private ExecutorService executorService;
+    private SharedViewModel viewModel;
     private FirebaseAuth mAuth;
 
 
@@ -74,7 +82,7 @@ public class HomeFragment extends Fragment implements LocationChangeCallback, Vi
         homeBinding.homeRecyclerView.setAdapter(homeAdapter);
         homeAdapter.submitList(generateHomeItems());
         executorService = Executors.newFixedThreadPool(4);
-
+        viewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         mAuth = FirebaseAuth.getInstance();
 
         if (!isPermissionGranted()) {
@@ -261,14 +269,57 @@ public class HomeFragment extends Fragment implements LocationChangeCallback, Vi
     }
 
 
-    // method implemented from the LocationChangeCallback interface
+    /**
+     * -----------------------------------------------------------------------------------
+     * These are methods implemented from the LocationChangeCallback interface
+     * @param location - this is the location object that we get from the location request
+     * ------------------------------------------------------------------------------------
+     */
     @Override
     public void onLocationChanged(Location location) {
+        viewModel.setLatitude(location.getLatitude());
+        viewModel.setLongitude(location.getLongitude());
         Log.d(TAG, "onLocationChanged: " + "Latitude is - " + location.getLatitude() + "   Longitude is - " + location.getLongitude());
     }
 
     @Override
     public void onLocationError(String message) {
         Log.d(TAG, "onLocationError: " + message);
+    }
+
+    /**
+     * -----------------------------------------------------------------------------------
+     * These are methods implemented from the RequestCallbacks interface
+     * ------------------------------------------------------------------------------------
+     */
+
+    @Override
+    public void onCategoriesFetched(List<Category> categories) {
+
+    }
+
+    @Override
+    public void onProductsFetched(List<Product> products) {
+
+    }
+
+    @Override
+    public void onHotelsFetched(List<Hotel> hotels) {
+
+    }
+
+    @Override
+    public void onOrdersFetched(List<Order> orders) {
+
+    }
+
+    @Override
+    public void onRequestFailure(int api_route, String error) {
+        NotifyUtils.logDebug(TAG, "onRequestFailure() -> " + error);
+
+        switch (api_route) {
+            case Routes.CATEGORY:
+                NotifyUtils.showToast(getContext(), "Unable to fetched categories");
+        }
     }
 }

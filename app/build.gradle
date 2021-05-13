@@ -60,4 +60,7 @@ dependencies {
     // FB SDK
     implementation 'com.facebook.android:facebook-android-sdk:5.15.3'
 
+    // OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.2'
+
 }

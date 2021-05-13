@@ -23,17 +23,6 @@ public class SplashActivity extends AppCompatActivity {
         splashBinding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(splashBinding.getRoot());
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            Log.d(TAG, "onCreate: " + String.format(Locale.ENGLISH, "Id: %s, Name: %s, Email: %s, Phone: %s, Image: %s",
-                    user.getUid(),
-                    user.getDisplayName(),
-                    user.getEmail(),
-                    user.getPhoneNumber(),
-                    String.valueOf(user.getPhotoUrl())));
-        }
-
-
         new Handler().postDelayed(() -> {
             startActivity(new Intent(SplashActivity.this, PreliminaryActivity.class));
             finish();
